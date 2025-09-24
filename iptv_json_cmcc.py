@@ -659,9 +659,9 @@ class IPTV2M3UGUI:
         self.url_combo = ttk.Combobox(url_frame, textvariable=self.url_var, width=60)
         self.url_combo.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=5, pady=2)
         self.url_combo['values'] = (
-            "http://183.235.16.92:8082/epg/api/custom/getAllChannel.json",
+            "http://183.235.11.39:8082/epg/api/custom/getAllChannel2.json",
             "http://183.235.16.92:8082/epg/api/custom/getAllChannel2.json",
-            "http://192.168.1.201/cgi-bin/iptv/epg/api/custom/getAllChannel.json",
+            "http://192.168.1.201:8080/http://183.235.11.39:8082/epg/api/custom/getAllChannel2.json",
             "http://192.168.1.201/cgi-bin/iptv/epg/api/custom/getAllChannel2.json"
         )
 
@@ -887,7 +887,7 @@ class IPTV2M3UGUI:
 
             # 检查内容类型
             content_type = response.headers.get('content-type', '')
-            if 'application/json' not in content_type and 'text/plain' not in content_type:
+            if 'json' not in content_type and 'text' not in content_type:
                 self.root.after(0, lambda: self.on_download_error(f"无效的内容类型: {content_type}"))
                 return
 
