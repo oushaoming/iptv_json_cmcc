@@ -163,7 +163,7 @@ class IPTV2M3U:
         try:
             with open(output_file, 'w', encoding='utf-8-sig', newline='') as f:
                 # 写入CSV表头
-                headers = ['code', 'title', 'channelnum', 'icon', 'hwurl', 'zteurl', 'bitrateType', 'bitrateTypeName']
+                headers = ['code', 'title', 'channelnum', 'hwurl', 'zteurl', 'bitrateType', 'bitrateTypeName', 'hwmediaid', 'ztecode', 'icon']
                 f.write(','.join(headers) + '\n')
 
                 processed_count = 0
@@ -189,6 +189,8 @@ class IPTV2M3U:
                         zteurl = params.get('zteurl', '')
                         bitrate_type = phychannel.get('bitrateType', '')
                         bitrate_type_name = phychannel.get('bitrateTypeName', '')
+                        ztecode = params.get('ztecode', '')
+                        hwmediaid = params.get('hwmediaid', '')
 
                         # 转义CSV中的逗号和引号
                         def escape_csv(value):
@@ -202,11 +204,13 @@ class IPTV2M3U:
                             escape_csv(code),
                             escape_csv(title),
                             escape_csv(channel_num),
-                            escape_csv(icon),
                             escape_csv(hwurl),
                             escape_csv(zteurl),
                             escape_csv(bitrate_type),
-                            escape_csv(bitrate_type_name)
+                            escape_csv(bitrate_type_name),
+                            escape_csv(hwmediaid),
+                            escape_csv(ztecode),
+                            escape_csv(icon)
                         ]
 
                         # 写入CSV行
