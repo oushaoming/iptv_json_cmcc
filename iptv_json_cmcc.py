@@ -1075,6 +1075,7 @@ class IPTV2M3UGUI:
                     use_hw=use_hw,
                     quality_preference=quality,
                     progress_callback=progress_callback,
+                    udp_proxy=udp_proxy,
                     multi_quality=multi_quality
                 )
             else:
