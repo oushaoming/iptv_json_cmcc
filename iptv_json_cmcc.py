@@ -737,6 +737,7 @@ class IPTV2M3UGUI:
         button_frame = ttk.Frame(main_frame)
         button_frame.grid(row=5, column=0, columnspan=2, pady=10)
 
+        ttk.Button(button_frame, text="仅下载", command=self.start_download_only).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="下载并转换", command=self.start_download_and_convert).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="选择本地文件", command=self.select_local_file).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="清空", command=self.clear_all).pack(side=tk.LEFT, padx=5)
@@ -854,6 +855,34 @@ class IPTV2M3UGUI:
                 file_path = os.path.join(dir_name, new_filename)
 
             self.output_var.set(file_path)
+
+    def start_download_only(self):
+        url = self.url_var.get()
+        if not url:
+            messagebox.showerror("错误", "请输入JSON源URL")
+            return
+        self.set_ui_enabled(False)
+        self.status_var.set("开始下载JSON文件...")
+        threading.Thread(target=self.download_thread_only, args=(url,), daemon=True).start()
+
+    def download_thread_only(self, url):
+        try:
+            response = requests.get(url, timeout=30)
+            response.raise_for_status()
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            temp_dir = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'temp')
+            os.makedirs(temp_dir, exist_ok=True)
+            file_name = f"downloaded_{timestamp}.json"
+            file_path = os.path.join(temp_dir, file_name)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(response.text)
+            self.log("\n    URL地址: "+url+"\n    文件保存为: " + file_path + "\n    下载完成")         
+        except Exception as e:
+            self.root.after(0, self.on_download_error, str(e))
+        finally:
+            self.root.after(0, self.set_ui_enabled, True)
+            self.set_ui_enabled(True)
+            self.status_var.set("完成")   
 
     def start_download_and_convert(self):
         url = self.url_var.get().strip()
