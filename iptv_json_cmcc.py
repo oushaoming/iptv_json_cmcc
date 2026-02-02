@@ -628,7 +628,7 @@ class IPTV2M3U:
 class IPTV2M3UGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("IPTV JSON转M3U/DIYP工具")
+        self.root.title("IPTV JSON转M3U/DIYP工具 v1.3")
         self.root.geometry("800x600")
 
         # 临时文件路径
